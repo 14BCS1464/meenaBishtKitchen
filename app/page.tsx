@@ -9,8 +9,8 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import { signInAnonymously } from 'firebase/auth';
-import { auth, db } from '../scr/lib/firebase';
+// import { signInAnonymously } from 'firebase/auth';
+// import { auth, db } from '../scr/lib/firebase';
 import FoodCard from './FoodCard';
 
 export default function Home() {
@@ -24,12 +24,36 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    signInAnonymously(auth);
-    const q = query(collection(db, 'foods'), orderBy('createdAt', 'desc'));
-    const unsub = onSnapshot(q, (snapshot) => {
-      setFoods(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    });
-    return () => unsub();
+    let unsub: any;
+
+    (async () => {
+      try {
+        const { auth, db } = await import('../scr/lib/firebase');
+        const { signInAnonymously } = await import('firebase/auth');
+        const { collection, onSnapshot, query, orderBy } = await import('firebase/firestore');
+
+        await signInAnonymously(auth);
+
+        const q = query(
+          collection(db, 'foods'),
+          orderBy('createdAt', 'desc')
+        );
+
+        unsub = onSnapshot(q, (snapshot) => {
+          setFoods(snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })));
+        });
+
+      } catch (err) {
+        console.error('Firebase runtime error:', err);
+      }
+    })();
+
+    return () => {
+      if (unsub) unsub();
+    };
   }, []);
 
   const submitReview = async () => {
