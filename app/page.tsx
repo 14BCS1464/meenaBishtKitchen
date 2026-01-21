@@ -68,7 +68,7 @@ export default function Home() {
       {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.headerGlow}></div>
-        <h1 style={styles.title}>🍔 Meena Bisth Kitchen</h1>
+        <h1 style={styles.title}> Meena Bisht Kitchen</h1>
         <p style={styles.subtitle}>Authentic reviews from food lovers worldwide</p>
         <div style={styles.headerStats}>
           <div style={styles.statItem}>
