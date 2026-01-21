@@ -14,7 +14,7 @@ const firebaseConfig = {
         process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
 };
 
-alert(JSON.stringify(firebaseConfig))
+
 // Prevent re-initialization on hot reload
 const app = !getApps().length
     ? initializeApp(firebaseConfig)
